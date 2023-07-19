@@ -96,7 +96,7 @@ ___
 	> Setup the Development Environment (py-2-1)    
 ___  
   
-## Create cookie.db and connect to project  
+## Create cookiejar.db and connect to project  
   
 1. Create `main.py` in root directory  
   
@@ -126,7 +126,7 @@ Untracked files:
         Pipfile
         Pipfile.lock
         README.md
-        cookie.db
+        cookiejar.db
         main.py
 nothing added to commit but untracked files present (use "git add" to track)  
 ```  
@@ -143,7 +143,7 @@ Changes to be committed:
         new file:   Pipfile
         new file:   Pipfile.lock
         new file:   README.md
-        new file:   cookie.db
+        new file:   cookiejar.db
         new file:   main.py
 ```  
   
@@ -156,7 +156,7 @@ Output:
  create mode 100644 Pipfile
  create mode 100644 Pipfile.lock
  create mode 100644 README.md
- create mode 100644 cookie.db
+ create mode 100644 cookiejar.db
  create mode 100644 main.py
 ```  
   
