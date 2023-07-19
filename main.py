@@ -2,7 +2,7 @@ import sqlite3
 
 try:
     # pass database name to establish connection to SQLite
-    sqliteConnection = sqlite3.connect('cookie.db')
+    sqliteConnection = sqlite3.connect('cookiejar.db')
     # create a cursor object to execute SQLite command/queries from Python
     cursor = sqliteConnection.cursor()
     print("Database created and Successfully Connected to SQLite")
