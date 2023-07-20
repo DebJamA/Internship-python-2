@@ -1,25 +1,15 @@
-import sqlite3
+import cookies as c
 
-try:
-    # pass database name to establish connection to SQLite
-    sqliteConnection = sqlite3.connect('cookie.db')
-    # create a cursor object to execute SQLite command/queries from Python
-    cursor = sqliteConnection.cursor()
-    print("Database created and Successfully Connected to SQLite")
+cookies = c.Cookies()
 
-    sqlite_select_Query = "select sqlite_version();"
-    # execute will run SQL query and return result
-    cursor.execute(sqlite_select_Query)
-    # fetchall will read query result
-    record = cursor.fetchall()
-    print("SQLite Database Version is: ", record)
-    # close cursor
-    cursor.close()
+#read table cookies total 10
+cookies.get_all()
 
-except sqlite3.Error as error:
-    print("Error while connecting to sqlite", error)
-finally:
-    if sqliteConnection:
-        # close connection
-        sqliteConnection.close()
-        print("The SQLite connection is closed")
+#placeholders for name, quantity, price
+cookies.insert_cookies('chocolate chip', '4 dozen', 15)
+
+#placeholders for name and price
+cookies.update_cookies('coconut macaroons', 5)
+
+#delete id_cookies 7 sugar cookies
+cookies.delete_cookies(7)

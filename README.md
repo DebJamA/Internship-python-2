@@ -1,185 +1,237 @@
-# Setup the Development Environment (py-2-1)  
+# Create 'cookies' Class and DB Table (py-2-2)  
   
 ---  
   
-## Set up development environment  
+## Make sure the system is set up properly  
   
-#### Installations and upgrades on computer  
+1. Make sure you are in the pipenv **(Internship-python-2) %** directory  
   
-**1.** macOS Ventura 13.4.1  
+2. Create and switch to new branch ***Internship-py-2-2***  
   
-**2.** Ensure [latest version of Python](https://www.python.org/downloads/) (for Mac) is installed:  
-`% python3 --version`  
-> Output: Python 3.11.3  
+	`(Internship-python-2)% git branch`  
+	```
+	Output:  
+	* Internship-py-2-1  
+	```  
   
--- Download Python 3.11.4 and follow prompts of Installer:  
-`% python3 --version`  
-> Output: Python 3.11.4  
+	`(Internship-python-2)% git checkout -b Internship-py-2-2`  
+	```
+	Output:  
+	‘Switched to branch ‘Internship-py-2-2’  
+	```  
   
-**3.** Upgrade pip:  
-`% pip3 install --upgrade pip`  
-`% pip3 -V`  
-> Output: pip 23.2  
-  
-**4.** Install [latest version of pipenv](https://pypi.org/project/pipenv/) - a Python virtualenv management tool:  
-`% pip3 install pipenv`  
-`% python3 -m pipenv --version`  
-> Output: pipenv, version 2023.7.11  
-  
-**5.** Ensure [current version](https://git-scm.com/download/win) of [Git is installed](https://git-scm.com/download/mac) and configured on Mac (using [Homebrew](https://brew.sh/)):  
-`% git --version`  
-> Output: git version 2.41.0  
-  
-**6.** Ensure [SQLite3](https://ports.macports.org/port/sqlite3/) is installed. It is pre-installed on Mac:  
-`% sqlite3 --version`  
-> Output: 3.39.5 2022-10-14  
+	`(Internship-python-2)% git branch`  
+	```
+	Output:  
+	Internship-py-2-1  
+	* Internship-py-2-2  
+	```  
   
 ___  
   
-## Create new project: Internship-python-2  
+## Create 'cookies' table  
   
-1. Log in to your GitHub account [or create a GitHub account](https://github.com/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F&source=header-home)    
+1. Create `cookies.py`  
   
-2. Create GitHub repo  
-	a. New repository  
-	b. Repository name: ***Internship-python-2***  
-	c. Choose repository visibility: Public  
-	d. Do not initialize the new repository with README, gitignore, or license files  
-	e. Create repository  
-	f. Copy the remote repository URL  
+	a. Create table **cookies** and specify data types  
   
-3. Ensure [PyCharm Community Edition](https://www.jetbrains.com/pycharm/download/?section=mac) (for Mac) is installed  
-    
-4. Open PyCharm to [Create a Python project](https://www.jetbrains.com/help/pycharm/pipenv.html):  
-***Internship-python-2***  
-	a. Configure Python interpreter:  
-	-- new environment **pipenv**  
-	-- make sure Base interpreter is **Python 3.11**  
+	b. Run `(Internship-python-2)% python3 cookies.py` to create table **cookies**  
   
-	b. Launch pipenv subshell in the venv (Internship-python-2):  
-	`(Internship-python-2)% pipenv shell`  
+	c. Update `cookies.py` to comment out all `CREATE TABLE` code  
   
-	c. Install packages (and dependencies):  
-	`(Internship-python-2)% pipenv install flask`  
-	`(Internship-python-2)% pipenv install pypyodbc`  
-	`(Internship-python-2)% pipenv install --dev pycodestyle`  
-	
-*Pypyodbc connects the database to the Python app  
-	A ctypes (foreign function Python library) Open Database Connectivity (ODBC) module,  
-	which means it is an API for accessing database management systems independent of database systems and operating systems*  
+	d. Pre-populate table **cookies** with data using DB Browser for SQLite  
+	- Download [sqlitebrowser for macOS](https://github.com/sqlitebrowser/sqlitebrowser) from GitHub  
+It is a SQLite-compatible, open source tool to manage databases with the spreadsheet-like UI,  similar to MySQLWorkbench  
   
-*Pycodestyle is a Python style guide checker*  
+	> Download and install: brew install --cask db-browser-for-sqlite  
+	> Open: Finder --> Applications --> DB Browser for SQLite  
+	> Open Database --> . . . /cookiejar.db --> Browse Data --> Insert a new record in the current table  
+	> Enter data  
+	> Write data to the database file
   
-5. Clone the Internship-python-2 repository  
-	a. Copy the HTTPS URL from GitHub  
-	b. Paste the link in the git command:
-	> (Internship-python-2)% git clone https://github.com/DebJamA/Internship-python-2.git  
-	
-	c. Set and verify new remote  
-	> (Internship-python-2)% git remote add cookie https://github.com/DebJamA/Internship-python-2.git  
-	> (Internship-python-2)% git remote -v  
-
-	> Output:  
-	> cookie  https://github.com/DebJamA/Internship-python-2.git (fetch)  
-	> cookie  https://github.com/DebJamA/Internship-python-2.git (push)  
+2. Create `class Cookeis:`  
   
-	d. Create a new branch:  
-`(Internship-python-2)% git init`  
-`(Internship-python-2)% git checkout -b Internship-py-2-1`  
+- Include initializer (`def __init__`) to implement the logic for connecting the database to the project  
   
-	> Output: Switched to a new branch 'Internship-py-2-1'  
+	- Include functions:   
+	-- `insert_cookies` to create  
+	-- `get_all` to read  
+	-- `update_cookies` to update  
+	-- `delete_cookies` to delete  
+	-- `end` to close connection  
   
-6. Create `.gitignore` file in root directory  
-	> Copy/paste from [mooowooo repo](https://gist.github.com/MOOOWOOO/3cf91616c9f3bbc3d1339adfc707b08a)  
+3. Update `main.py`  
+`import cookies as c` to run the Cookies class functions  
   
-7. Create `README.md`  
-	> Setup the Development Environment (py-2-1)    
 ___  
   
-## Create cookie.db and connect to project  
+## Run the app  
   
-1. Create `main.py` in root directory  
+1. Check the style of `main.py`:  
+`(Internship-python-2)% pycodestyle main.py`  
   
-2. Check the style of main.py:  
-`% pycodestyle main.py`  
-  
-3. Run the app  
+2. Run the app:  
 `(Internship-python-2)% python3 main.py`  
   
-> Output:  
-> Database created and Successfully Connected to SQLite  
-> SQLite Database Version is:  [('3.42.0',)]  
-> The SQLite connection is closed  
+```
+Output:  
+SQLite table cookies already exists
+Connected to SQLite
+Simco Cookie Jar initialized []
+Total rows are:   9
+Printing each row
+ID:  1
+Name:  peanut butter blossom
+Quantity:  3 dozen
+Price:  9
+
+ID:  2
+Name:  oatmeal raisin
+Quantity:  2 dozen
+Price:  12
+
+ID:  3
+Name:  coffee cashew biscotti
+Quantity:  4 dozen
+Price:  16
+
+ID:  4
+Name:  ginger molasses
+Quantity:  2 dozen
+Price:  14
+
+ID:  5
+Name:  lemon crinkle
+Quantity:  3 dozen
+Price:  10
+
+ID:  6
+Name:  coconut macaroons
+Quantity:  1 dozen
+Price:  6
+
+ID:  7
+Name:  sugar cookies
+Quantity:  3 dozen
+Price:  7
+
+ID:  8
+Name:  linzer thumbprints
+Quantity:  4 dozen
+Price:  15
+
+ID:  9
+Name:  maple walnut shortbread bars
+Quantity:  3 dozen
+Price:  17
+
+end cookie recipes - yummm
+recipe has been added to table cookies
+the price has been updated
+recipe deleted from db cookiejar
+```  
+  
+4. Check the data  
+`(Internship-python-2)% python3 main.py`  
+  
+```
+Output:  
+SQLite table cookies already exists
+Connected to SQLite
+Simco Cookie Jar initialized []
+Total rows are:   9
+Printing each row
+ID:  1
+Name:  peanut butter blossom
+Quantity:  3 dozen
+Price:  9
+
+ID:  2
+Name:  oatmeal raisin
+Quantity:  2 dozen
+Price:  12
+
+ID:  3
+Name:  coffee cashew biscotti
+Quantity:  4 dozen
+Price:  16
+
+ID:  4
+Name:  ginger molasses
+Quantity:  2 dozen
+Price:  14
+
+ID:  5
+Name:  lemon crinkle
+Quantity:  3 dozen
+Price:  10
+
+ID:  6
+Name:  coconut macaroons
+Quantity:  1 dozen
+Price:  5
+
+ID:  8
+Name:  linzer thumbprints
+Quantity:  4 dozen
+Price:  15
+
+ID:  9
+Name:  maple walnut shortbread bars
+Quantity:  3 dozen
+Price:  17
+
+ID:  10
+Name:  chocolate chip
+Quantity:  4 dozen
+Price:  15
+
+end cookie recipes - yummm
+recipe has been added to table cookies
+the price has been updated
+recipe deleted from db cookiejar
+```  
+
+5. View table **cookies** using sqlite shell  
+	`(Internship-python-2)% sqlite3 cookiejar.db`  
+  
+	`sqlite> .databases`  
+	> Output:  
+	> main: . . . /Internship-python-2/cookiejar.db r/w  
+  
+	`sqlite> .tables`  
+	> Output:  
+	> cookies  
+  
+	`sqlite> .mode column`  
+	`sqlite> SELECT * from cookies;`  
+  
+```
+id_cookies  name                          quantity  price
+----------  ----------------------------  --------  -----
+1           peanut butter blossom         3 dozen   9    
+2           oatmeal raisin                2 dozen   12   
+3           coffee cashew biscotti        4 dozen   16   
+4           ginger molasses               2 dozen   14   
+5           lemon crinkle                 3 dozen   10   
+6           coconut macaroons             1 dozen   5    
+8           linzer thumbprints            4 dozen   15   
+9           maple walnut shortbread bars  3 dozen   17   
+10          chocolate chip                4 dozen   15    
+```
+`sqlite> .quit`  
+  
+The data checks out:    
+ID 10 chocolate chip, 4 dozen, 15 was added  
+ID 6 price was changed from 6 to 5  
+ID 7 sugar cookies has been deleted  
   
 ___  
   
 ## Push to GitHub:  
  
-`% git status`  
-```
-Output:  
-On branch Internship-py-2-1
-No commits yet
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-        .gitignore
-        Pipfile
-        Pipfile.lock
-        README.md
-        cookie.db
-        main.py
-nothing added to commit but untracked files present (use "git add" to track)  
-```  
+`(Internship-python-2)% git commit -m "added Cookies class and db table"`  
   
-`% git add .`  
-`% git status` 
-```
-Output:  
-On branch Internship-py-2-1
-No commits yet
-Changes to be committed:
-  (use "git rm --cached <file>..." to unstage)
-        new file:   .gitignore
-        new file:   Pipfile
-        new file:   Pipfile.lock
-        new file:   README.md
-        new file:   cookie.db
-        new file:   main.py
-```  
-  
-`% git commit -m "added init project"`  
-```
-Output:  
-[Internship-py-2-1 (root-commit) 20e50e6] added init project
- 6 files changed, 494 insertions(+)
- create mode 100644 .gitignore
- create mode 100644 Pipfile
- create mode 100644 Pipfile.lock
- create mode 100644 README.md
- create mode 100644 cookie.db
- create mode 100644 main.py
-```  
-  
-`% git status`  
-```
-Output:  
-On branch Internship-py-2-1
-nothing to commit, working tree clean
-```  
-  
-`% git push cookie Internship-py-2-1`  
-```  
-Output:  
-Enumerating objects: 8, done.
-Counting objects: 100% (8/8), done.
-Delta compression using up to 4 threads
-Compressing objects: 100% (7/7), done.
-Writing objects: 100% (8/8), 7.02 KiB | 2.34 MiB/s, done.
-Total 8 (delta 0), reused 0 (delta 0), pack-reused 0
-To https://github.com/DebJamA/Internship-python-2.git
- * [new branch]      Internship-py-2-1 -> Internship-py-2-1
-```  
-  
----  
+___  
   
   
