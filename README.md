@@ -230,8 +230,16 @@ ___
   
 ## Push to GitHub:  
  
-`(Internship-python-2)% git commit -m "added Cookies class and db table"`  
+`(Internship-python-2)% git add .`  
   
-___  
+`(Internship-python-2)% git commit -m "added Cookies class and db table"`   
+  
+`(Internship-python-2)% git push cookie Internship-py-2-2`  
+```  
+Output:  
+ * [new branch]      Internship-py-2-2 -> Internship-py-2-2
+```  
+  
+---  
   
   
