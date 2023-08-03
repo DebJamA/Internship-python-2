@@ -1,4 +1,4 @@
-# Create 'cookies' Class and DB Table (py-2-2)  
+# Create 'Ingredients' Class and DB Table (py-2-3)  
   
 ---  
   
@@ -6,232 +6,223 @@
   
 1. Make sure you are in the pipenv **(Internship-python-2) %** directory  
   
-2. Create and switch to new branch ***Internship-py-2-2***  
+2. Create and switch to new branch ***Internship-py-2-3***  
   
-	`(Internship-python-2)% git branch`  
-	```
-	Output:  
-	* Internship-py-2-1  
-	```  
-  
-	`(Internship-python-2)% git checkout -b Internship-py-2-2`  
-	```
-	Output:  
-	‘Switched to branch ‘Internship-py-2-2’  
-	```  
-  
-	`(Internship-python-2)% git branch`  
-	```
-	Output:  
-	Internship-py-2-1  
-	* Internship-py-2-2  
-	```  
+3. If `pypyodbc` is not working - [setting up odbc drivers](https://solutions.posit.co/connections/db/best-practices/drivers/#setting-up-database-connections-1) for SQLite with a helpful [video](https://www.youtube.com/watch?v=id0GX4sXnyI)  
   
 ___  
   
-## Create 'cookies' table  
+## Data modeling: SQL schema  
   
-1. Create `cookies.py`  
+1. Design relational db management system for `cookiejar.db` using [DBDiagram.io](https://dbdiagram.io/home)  
   
-	a. Create table **cookies** and specify data types  
+![cookiejar.db schema diagram](https://raw.githubusercontent.com/DebJamA/Internship-python-2/Internship-py-2-3/rdms_cookiejar.png)  
   
-	b. Run `(Internship-python-2)% python3 cookies.py` to create table **cookies**  
+2. Create `tables.py` to create all tables  
+- include `FOREGN KEY` where necessary  
+- run `python3 tables.py`  
   
-	c. Update `cookies.py` to comment out all `CREATE TABLE` code  
+```  
+Output:  
+
+***********************************
+Connection open
+
+Successfully created 4 tables:
+('cookie',)
+('cookie_ingredient',)
+('ingredient',)
+('sqlite_sequence',)
+
+sqlite_sequence table was automatically created
+and initialized because normal table 'cookie'
+contains AUTOINCREMENT column
+
+Connection closed
+***********************************
+
+```  
   
-	d. Pre-populate table **cookies** with data using DB Browser for SQLite  
-	- Download [sqlitebrowser for macOS](https://github.com/sqlitebrowser/sqlitebrowser) from GitHub  
-It is a SQLite-compatible, open source tool to manage databases with the spreadsheet-like UI,  similar to MySQLWorkbench  
+___  
   
-	> Download and install: brew install --cask db-browser-for-sqlite  
-	> Open: Finder --> Applications --> DB Browser for SQLite  
-	> Open Database --> . . . /cookiejar.db --> Browse Data --> Insert a new record in the current table  
-	> Enter data  
-	> Write data to the database file
+## Database query  
   
-2. Create `class Cookeis:`  
+1. Re-populate table **cookie** with data and pre-populate table **ingredient** and table **cookie_ingredient** using DB Browser for SQLite  
   
-- Include initializer (`def __init__`) to implement the logic for connecting the database to the project  
+2. Check data in sqlite shell  
+```
+sqlite> .mode column
+sqlite> SELECT * FROM cookie;
+id_cookie  cookie_name    instructions          price
+---------  -------------  --------------------  -----
+1          first cookie   step1, step2,  step3  15   
+2          second cookie  step1, step2,  step3  9    
+3          third cookie   step1, step2,  step3  8    
+4          delete cookie  step1, step2,  step3  99   
+5          fifth cookie  step1, step2,  step3  3    
+
+sqlite> SELECT * FROM ingredient;
+id_ingredient  ingredient_name    cost 
+-------------  -----------------  -----
+1              first ingredient   13.49
+2              second ingredient  6.99 
+3              third ingredient   2.48 
+4              delete ingredient  99.99
+5              fifth ingredient   1.67 
+
+sqlite> SELECT * FROM cookie_ingredient;
+id_cookie  id_ingredient  measure  
+---------  -------------  ---------
+1          1              1 1/2 cup
+1          2              1/2 tsp  
+1          3              1 stick  
+1          5              1 tbsp   
+2          1              2 cup    
+2          5              1/2 tbsp 
+3          1              2 1/4 cup
+3          3              2 sticks 
+3          5              2 tbsp   
+5          1              2 1/2 cup
+5          2              1/4 tsp
+```
   
-	- Include functions:   
-	-- `insert_cookies` to create  
-	-- `get_all` to read  
-	-- `update_cookies` to update  
-	-- `delete_cookies` to delete  
-	-- `end` to close connection  
+3. Create `ingredients.py`  
   
-3. Update `main.py`  
-`import cookies as c` to run the Cookies class functions  
+- Create `class Ingredients` and define functions for CRUD operations for table  
+ **ingredient**:  
+	- `INSERT` **ingredient** - ingredient_name and cost  
+	- `SELECT` all **ingredient** to view list of each ngredient_name and cost  
+	- `UPDATE` a selected **ingredient** cost  
+	- `DELETE` a selected **ingredient** from the db  
+  
+4. Update `cookies.py` to include additional functions:  
+	- Sort all **cookie** by **price**  
+	- Get all **ingredient** for a selected **cookie**  
+	- Get total **cost** of all **ingredient** for a selected **cookie**  
+  
+5. Update `main.py` to run the app  
+  
+6. Update `README.md`  
   
 ___  
   
 ## Run the app  
   
-1. Check the style of `main.py`:  
-`(Internship-python-2)% pycodestyle main.py`  
-  
-2. Run the app:  
-`(Internship-python-2)% python3 main.py`  
-  
+1. `(Internship-python-2)% python3 main.py`  
+	-- Make sure everything is working  
 ```
-Output:  
-SQLite table cookies already exists
-Connected to SQLite
-Simco Cookie Jar initialized []
-Total rows are:   9
-Printing each row
+You have 6 cookie recipes in your Cookie Jar:
+
 ID:  1
-Name:  peanut butter blossom
-Quantity:  3 dozen
-Price:  9
+Cookie:  first cookie
+Price: $ 15
 
 ID:  2
-Name:  oatmeal raisin
-Quantity:  2 dozen
-Price:  12
+Cookie:  second cookie
+Price: $ 9
 
 ID:  3
-Name:  coffee cashew biscotti
-Quantity:  4 dozen
-Price:  16
+Cookie:  third cookie
+Price: $ 8
 
 ID:  4
-Name:  ginger molasses
-Quantity:  2 dozen
-Price:  14
+Cookie:  delete cookie
+Price: $ 99
 
 ID:  5
-Name:  lemon crinkle
-Quantity:  3 dozen
-Price:  10
+Cookie:  fifth cookie
+Price: $ 3
 
 ID:  6
-Name:  coconut macaroons
-Quantity:  1 dozen
-Price:  6
+Cookie:  sixth cookie
+Price: $ 7
 
-ID:  7
-Name:  sugar cookies
-Quantity:  3 dozen
-Price:  7
+**********
+There are 6 ingredients in your Cookie Jar:
 
-ID:  8
-Name:  linzer thumbprints
-Quantity:  4 dozen
-Price:  15
-
-ID:  9
-Name:  maple walnut shortbread bars
-Quantity:  3 dozen
-Price:  17
-
-end cookie recipes - yummm
-recipe has been added to table cookies
-the price has been updated
-recipe deleted from db cookiejar
-```  
-  
-4. Check the data  
-`(Internship-python-2)% python3 main.py`  
-  
-```
-Output:  
-SQLite table cookies already exists
-Connected to SQLite
-Simco Cookie Jar initialized []
-Total rows are:   9
-Printing each row
 ID:  1
-Name:  peanut butter blossom
-Quantity:  3 dozen
-Price:  9
+Ingredient:  first ingredient
+Cost: $ 13.49
 
 ID:  2
-Name:  oatmeal raisin
-Quantity:  2 dozen
-Price:  12
+Ingredient:  second ingredient
+Cost: $ 6.99
 
 ID:  3
-Name:  coffee cashew biscotti
-Quantity:  4 dozen
-Price:  16
+Ingredient:  third ingredient
+Cost: $ 2.48
 
 ID:  4
-Name:  ginger molasses
-Quantity:  2 dozen
-Price:  14
+Ingredient:  delete ingredient
+Cost: $ 99.99
 
 ID:  5
-Name:  lemon crinkle
-Quantity:  3 dozen
-Price:  10
+Ingredient:  fifth ingredient
+Cost: $ 1.67
 
 ID:  6
-Name:  coconut macaroons
-Quantity:  1 dozen
-Price:  5
+Ingredient:  sixth ingredient
+Cost: $ 5.29
 
-ID:  8
-Name:  linzer thumbprints
-Quantity:  4 dozen
-Price:  15
+**********
+There are 12 recipes in your Cookie Jar:
 
-ID:  9
-Name:  maple walnut shortbread bars
-Quantity:  3 dozen
-Price:  17
+(1, 1, '1 1/2 cup')
+(1, 2, '1/2 tsp')
+(1, 3, '1 stick')
+(1, 5, '1 tbsp')
+(2, 1, '2 cup')
+(2, 5, '1/2 tbsp')
+(3, 1, '2 1/4 cup')
+(3, 3, '2 sticks')
+(3, 5, '2 tbsp')
+(5, 1, '2 1/2 cup')
+(5, 2, '1/4 tsp')
+(2, 6, '14 oz')
 
-ID:  10
-Name:  chocolate chip
-Quantity:  4 dozen
-Price:  15
+**********
+Sorting 5 cookies by price:
 
-end cookie recipes - yummm
-recipe has been added to table cookies
-the price has been updated
-recipe deleted from db cookiejar
-```  
+(5, 'fifth cookie', 'step1, step2,  step3', 3)
+(1, 'first cookie', 'step1, step2,  step3', 5)
+(6, 'sixth cookie', 'step1, step2, step3', 7)
+(3, 'third cookie', 'step1, step2,  step3', 8)
+(2, 'second cookie', 'step1, step2,  step3', 9)
 
-5. View table **cookies** using sqlite shell  
-	`(Internship-python-2)% sqlite3 cookiejar.db`  
-  
-	`sqlite> .databases`  
-	> Output:  
-	> main: . . . /Internship-python-2/cookiejar.db r/w  
-  
-	`sqlite> .tables`  
-	> Output:  
-	> cookies  
-  
-	`sqlite> .mode column`  
-	`sqlite> SELECT * from cookies;`  
-  
+***** Get all ingredients for each cookie *****
+('fifth cookie', '2 1/2 cup', 'first ingredient', 3.49)
+('fifth cookie', '1/4 tsp', 'second ingredient', 6.99)
+('first cookie', '1 tbsp', 'fifth ingredient', 1.67)
+('first cookie', '1 1/2 cup', 'first ingredient', 3.49)
+('first cookie', '1/2 tsp', 'second ingredient', 6.99)
+('first cookie', '1 stick', 'third ingredient', 2.48)
+('second cookie', '1/2 tbsp', 'fifth ingredient', 1.67)
+('second cookie', '2 cup', 'first ingredient', 3.49)
+('second cookie', '14 oz', 'sixth ingredient', 5.29)
+('third cookie', '2 tbsp', 'fifth ingredient', 1.67)
+('third cookie', '2 1/4 cup', 'first ingredient', 3.49)
+('third cookie', '2 sticks', 'third ingredient', 2.48)
+
+***** Total cost of ingredients for each cookie *****
+Cookie:  fifth cookie
+Total Cost: $ 10.48
+
+Cookie:  first cookie
+Total Cost: $ 14.63
+
+Cookie:  second cookie
+Total Cost: $ 10.45
+
+Cookie:  third cookie
+Total Cost: $ 7.64
 ```
-id_cookies  name                          quantity  price
-----------  ----------------------------  --------  -----
-1           peanut butter blossom         3 dozen   9    
-2           oatmeal raisin                2 dozen   12   
-3           coffee cashew biscotti        4 dozen   16   
-4           ginger molasses               2 dozen   14   
-5           lemon crinkle                 3 dozen   10   
-6           coconut macaroons             1 dozen   5    
-8           linzer thumbprints            4 dozen   15   
-9           maple walnut shortbread bars  3 dozen   17   
-10          chocolate chip                4 dozen   15    
-```
-`sqlite> .quit`  
   
-The data checks out:    
-ID 10 chocolate chip, 4 dozen, 15 was added  
-ID 6 price was changed from 6 to 5  
-ID 7 sugar cookies has been deleted  
-  
-___  
-  
-## Push to GitHub:  
+2. Push to GitHub:  
  
-`(Internship-python-2)% git commit -m "added Cookies class and db table"`  
+	a. `(Internship-python-2)% git add .`  
   
-___  
+	b. `(Internship-python-2)% git commit -m "created relational db schema"`   
   
+	c. `(Internship-python-2)% git push cookie Internship-py-2-3`  
   
+---  
