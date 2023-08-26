@@ -1,228 +1,284 @@
-# Create 'Ingredients' Class and DB Table (py-2-3)  
+# Work with Django (py-2-4)  
   
 ---  
   
-## Make sure the system is set up properly  
+## Configure dev env to include Django  
   
 1. Make sure you are in the pipenv **(Internship-python-2) %** directory  
   
-2. Create and switch to new branch ***Internship-py-2-3***  
+2. Create and switch to new branch ***Internship-py-2-4***  
   
-3. If `pypyodbc` is not working - [setting up odbc drivers](https://solutions.posit.co/connections/db/best-practices/drivers/#setting-up-database-connections-1) for SQLite with a helpful [video](https://www.youtube.com/watch?v=id0GX4sXnyI)  
+3. Install packages with pipenv:  
   
-___  
+	a. `pipenv install Django`  
+		`pipenv install django-environ`  
   
-## Data modeling: SQL schema  
+	b. *Note: mistakenly installed flask
+	`pipenv uninstall flask`*  
   
-1. Design relational db management system for `cookiejar.db` using [DBDiagram.io](https://dbdiagram.io/home)  
+	c. Check Pipfile:  
+	>[[source]]  
+	>url = "https://pypi.org/simple"  
+	>verify_ssl = true  
+	>name = "pypi"  
+	>  
+	>[packages]  
+	>pypyodbc = "\*"  
+	>django = "\*"    
+	>django-environ = "\*"
+	> 
+	>[dev-packages]  
+	>pycodestyle = "\*"  
+	>  
+	>[requires]  
+	>python_version = "3.11"  
+	>python_full_version = "3.11.4"
   
-![cookiejar.db schema diagram](https://raw.githubusercontent.com/DebJamA/Internship-python-2/Internship-py-2-3/rdms_cookiejar.png)  
+4. Launch subshell in the pipenv:  
+	`pipenv shell`  
   
-2. Create `tables.py` to create all tables  
-- include `FOREGN KEY` where necessary  
-- run `python3 tables.py`  
+5. Initialize Django project - **coolsite**:  
+	`django-admin startproject coolsite .`  
   
-```  
-Output:  
-
-***********************************
-Connection open
-
-Successfully created 4 tables:
-('cookie',)
-('cookie_ingredient',)
-('ingredient',)
-('sqlite_sequence',)
-
-sqlite_sequence table was automatically created
-and initialized because normal table 'cookie'
-contains AUTOINCREMENT column
-
-Connection closed
-***********************************
-
-```  
+:file_folder:`Internship-python-2`  
+  `├──`:file_folder:`coolsite`  
+  `│ ├──__init__.py`  
+  `│ ├──asgi.py`  
+  `│ ├──settings.py`  
+  `│ ├──urls.py`  
+  `│ └──wsgi.py`  
+  `└──manage.py`  
+  
+6. Confirm Django local webserver  
+  
+	a. `python3 manage.py runserver`  
+	```
+	Django version 4.2.4, using settings 'coolsite.settings'
+	Starting development server at http://127.0.0.1:8000/
+	```  
+  
+	b. Visit `http://127.0.0.1:8000/` on a web browser to see the Django install confirmation page  
+  
+	c. Stop local server: `control+C`  
+  
+7. Use [django-environ](https://pypi.org/project/django-environ/) to manage environment variables:  
+  
+	a. Refactor  `settings.py` to a `settings` directory  
+  
+`├──`:file_folder:`settings.py`  
+`│ ├── __init__.py`  
+`│ ├── base.py`  
+`│ ├── development.py`  
+`│ └── prouction.py`  
+`├──__init__.py`  
+`├──asgi.py`  
+`├──urls.py`  
+`└──wsgi.py`  
+  
+b. Update `base.py` (replaces `settings.py`)  
+  
+c. Create `.env` in root directory (with `manage.py`)  
+		`DEBUG=True`  
+		`SECRET_KEY=<your-secret-key>`  
+  
+- Use [Djecrety](https://djecrety.ir/) to generate a Django secret key to replace `<your-secret-key>`  
+  
+- Environment variables will be read on startup from a `.env` file (instead of hardcoded in the `base.py` file)  
+  
+- Create `.env.example` in root directory (with `manage.py`)  
+		`DEBUG=True`  
+		`SECRET_KEY=<try-using-djecrety-to-generate-a-secret-key>`    
+  
+- Some values in `base.py` need to be kept secret so only `.env.example` is pushed to GitHub  
+  
+d. Make sure Django places all directories where static files can be found into the `STATIC_ROOT` so that static files will be served from the `STATIC_ROOT` in production 
+	- `python3 manage.py collectstatic`  
+  
+8. Confirm Django local webserver  
+  
+	a. `python3 manage.py runserver`  
+  
+	b. Visit `http://127.0.0.1:8000/`  
+  
+	c. `control+C`  
+  
+9. Update `.gitignore`  
+	```
+	# setting up django project with pipenv  
+	# https://python.plainenglish.io/setting-up-a-basic-django-project-with-pipenv-7c58fa2ec631  
+	# config secrets with django-environ and created .env file  
+	**/*.pyc  
+	**/__pycache__  
+	.DS_Store  
+	*.sqlite3  
+	# .env already in this file
+	```  
   
 ___  
   
 ## Database query  
   
-1. Re-populate table **cookie** with data and pre-populate table **ingredient** and table **cookie_ingredient** using DB Browser for SQLite  
+1. Update `coolsite`/`urls.py`  
+	```
+	from django.contrib import admin  
+	from django.urls import path, include  
   
-2. Check data in sqlite shell  
+	urlpatterns = [  
+	path('admin/', admin.site.urls),  
+	path('cookiejar/', include('cookiejar.urls')),  
+	]
+	```
+  
+2. Create new Python Package in root directory: `cookiejar`  
+  
+- Update `cookiejar`/`apps.py`  
+  
+3. Create db tables  
+  `python3 manage.py migrate`  
+  
+4. Define and activate the models  
+  	
+	a. Update `cookiejar`/`models.py`  
+  
+	- Be sure to add `__str__()` methods to the models
+  
+	b. Tell Django there are changes to the models  
+	`python3 manage.py makemigrations cookiejar`  
+  
+	c. Return the SQL of the migration  
+	`python3 manage.py sqlmigrate cookiejar 0001`  
+  
+	d. Create model tables in the db and synchronize changes  
+	`python3 manage.py migrate`  
+  
+5. Use the database API to create Cookie and Ingredient data  
+	`python3 manage.py shell`  
 ```
-sqlite> .mode column
-sqlite> SELECT * FROM cookie;
-id_cookie  cookie_name    instructions          price
----------  -------------  --------------------  -----
-1          first cookie   step1, step2,  step3  15   
-2          second cookie  step1, step2,  step3  9    
-3          third cookie   step1, step2,  step3  8    
-4          delete cookie  step1, step2,  step3  99   
-5          fifth cookie  step1, step2,  step3  3    
+Python 3.11.4 . . .
+(InteractiveConsole)
+>>> from cookiejar.models import Cookie, Ingredient, CookieIngredient
 
-sqlite> SELECT * FROM ingredient;
-id_ingredient  ingredient_name    cost 
--------------  -----------------  -----
-1              first ingredient   13.49
-2              second ingredient  6.99 
-3              third ingredient   2.48 
-4              delete ingredient  99.99
-5              fifth ingredient   1.67 
+#no cookie in the table yet
+>>> Cookie.objects.all()
+<QuerySet []>
 
-sqlite> SELECT * FROM cookie_ingredient;
-id_cookie  id_ingredient  measure  
----------  -------------  ---------
-1          1              1 1/2 cup
-1          2              1/2 tsp  
-1          3              1 stick  
-1          5              1 tbsp   
-2          1              2 cup    
-2          5              1/2 tbsp 
-3          1              2 1/4 cup
-3          3              2 sticks 
-3          5              2 tbsp   
-5          1              2 1/2 cup
-5          2              1/4 tsp
+#create cookies
+>>> Cookie.objects.bulk_create([Cookie(cookie_name='first cookie',instructions='step1, step2, step3',price=5),Cookie(cookie_name='second cookie',instructions='step1, step2, step3',price=11),Cookie(cookie_name='third cookie',instructions='step1, step2, step3, step4',price=7),Cookie(cookie_name='fourth cookie',instructions='step1, step2, step3',price=3),Cookie(cookie_name='fifth cookie',instructions='step1, step2, step3, step4',price=9)])
+
+[<Cookie: first cookie, step1, step2, step3, 5>, <Cookie: second cookie, step1, step2, step3, 11>, <Cookie: third cookie, step1, step2, step3, step4, 7>, <Cookie: fourth cookie, step1, step2, step3, 3>, <Cookie: fifth cookie, step1, step2, step3, step4, 9>]
+
+#display all cookie in db
+>>> cc = Cookie.objects.all()
+>>> for c in cc:
+...  print(c)
+... 
+fifth cookie, 9, step1, step2, step3, step4
+fourth cookie, 3, step1, step2, step3
+third cookie, 7, step1, step2, step3, step4
+second cookie, 11, step1, step2, step3
+first cookie, 5, step1, step2, step3
+
+#create ingredients
+>>> Ingredient.objects.bulk_create([Ingredient(ingredient_name='first ingredient',cost=2.49),Ingredient(ingredient_name='second ingredient',cost=4.99),Ingredient(ingredient_name='third ingredient',cost=3.28),Ingredient(ingredient_name='fourth ingredient',cost=1.67),Ingredient(ingredient_name='fifth ingredient',cost=3.97)])
+
+[<Ingredient: first ingredient, 2.49>, <Ingredient: second ingredient, 4.99>, <Ingredient: third ingredient, 3.28>, <Ingredient: fourth ingredient, 1.67>, <Ingredient: fifth ingredient, 3.97>]
+
+#display all ingredient in db
+>>> ii = Ingredient.objects.all()
+>>> for i in ii:
+...  print(i)
+... 
+fifth ingredient, 3.97
+first ingredient, 2.49
+fourth ingredient, 1.67
+second ingredient, 4.99
+third ingredient, 3.28
+
+>>> quit()
+```  
+  	
+6. Use DB Browser for SQLite to create CookieIngredient data then view in the shell  
+`python3 manage.py shell`  
 ```
+>>> from cookiejar.models import Cookie, Ingredient, CookieIngredient
+>>> xx = CookieIngredient.objects.all()
+>>> for x in xx:
+...  print(x)
+... 
+fifth cookie, 9, step1, step2, step3, step4_1 stick_fifth ingredient, 3.97
+fifth cookie, 9, step1, step2, step3, step4_1 tsp_fourth ingredient, 1.67
+fifth cookie, 9, step1, step2, step3, step4_1/4 tbsp_second ingredient, 4.99
+fifth cookie, 9, step1, step2, step3, step4_2 cup_third ingredient, 3.28
+fourth cookie, 3, step1, step2, step3_1/4 tsp_fourth ingredient, 1.67
+fourth cookie, 3, step1, step2, step3_1 tbsp_second ingredient, 4.99
+fourth cookie, 3, step1, step2, step3_1 cup_third ingredient, 3.28
+third cookie, 7, step1, step2, step3, step4_1/2 stick_fifth ingredient, 3.97
+third cookie, 7, step1, step2, step3, step4_2 tsp_fourth ingredient, 1.67
+third cookie, 7, step1, step2, step3, step4_1/2 cup_third ingredient, 3.28
+second cookie, 11, step1, step2, step3_2 stick_fifth ingredient, 3.97
+second cookie, 11, step1, step2, step3_9 oz_first ingredient, 2.49
+second cookie, 11, step1, step2, step3_3/4 tsp_fourth ingredient, 1.67
+second cookie, 11, step1, step2, step3_1/2 tbsp_second ingredient, 4.99
+second cookie, 11, step1, step2, step3_2 cup_third ingredient, 3.28
+first cookie, 5, step1, step2, step3_14 oz_first ingredient, 2.49
+first cookie, 5, step1, step2, step3_1/2 tbsp_second ingredient, 4.99
+first cookie, 5, step1, step2, step3_1 1/3 cup_third ingredient, 3.28  
+```  
   
-3. Create `ingredients.py`  
+7. Create class based views that print to console  
   
-- Create `class Ingredients` and define functions for CRUD operations for table  
- **ingredient**:  
-	- `INSERT` **ingredient** - ingredient_name and cost  
-	- `SELECT` all **ingredient** to view list of each ngredient_name and cost  
-	- `UPDATE` a selected **ingredient** cost  
-	- `DELETE` a selected **ingredient** from the db  
+a. Update `cookiejar`/`views.py`  
   
-4. Update `cookies.py` to include additional functions:  
-	- Sort all **cookie** by **price**  
-	- Get all **ingredient** for a selected **cookie**  
-	- Get total **cost** of all **ingredient** for a selected **cookie**  
+- `class CookieListView(ListView):` - to list all cookies  
   
-5. Update `main.py` to run the app  
+- `class CookiePriceListView(ListView):` - to list all cookies by price  
   
-6. Update `README.md`  
+- `class class CookieDetailView(UpdateView)` - to view selected cookie info and ingredients info  
+  
+- `class CookieCreateView(CreateView)` - to add a new cookie to db  
+  
+- `class CookieUpdateView(UpdateView)` - to update a cookie in db  
+  
+- `class CookieDeleteView(DeleteView):` - to confirm deleting a selected cookie  
+  
+b. Create `templates` directory in root directory  
+- Get [Bootstrap](https://getbootstrap.com/docs/5.3/getting-started/introduction/#separate) v5.3 CDN
+- Create `layout.html`  
+  
+c. Create `cookiejar/templates/cookiejar` directory  
+  
+- Create `cookie_list.html`  
+  
+- Create `cookie_price_list.html`  
+  
+- Create `cookie_detail.html`  
+  
+- Create `cookie_add.html`  
+  
+- Create `cookie_update.html`  
+  
+- Create `cookie_confirm_delete.html`  
+    
+d. Update `cookiejar`/`urls.py`  
+  
+e. If the models were changed:  
+  
+- `python3 manage.py makemigrations`  
+  
+- `python3 manage.py migrate`  
   
 ___  
   
 ## Run the app  
   
-1. `(Internship-python-2)% python3 main.py`  
-	-- Make sure everything is working  
-```
-You have 6 cookie recipes in your Cookie Jar:
-
-ID:  1
-Cookie:  first cookie
-Price: $ 15
-
-ID:  2
-Cookie:  second cookie
-Price: $ 9
-
-ID:  3
-Cookie:  third cookie
-Price: $ 8
-
-ID:  4
-Cookie:  delete cookie
-Price: $ 99
-
-ID:  5
-Cookie:  fifth cookie
-Price: $ 3
-
-ID:  6
-Cookie:  sixth cookie
-Price: $ 7
-
-**********
-There are 6 ingredients in your Cookie Jar:
-
-ID:  1
-Ingredient:  first ingredient
-Cost: $ 13.49
-
-ID:  2
-Ingredient:  second ingredient
-Cost: $ 6.99
-
-ID:  3
-Ingredient:  third ingredient
-Cost: $ 2.48
-
-ID:  4
-Ingredient:  delete ingredient
-Cost: $ 99.99
-
-ID:  5
-Ingredient:  fifth ingredient
-Cost: $ 1.67
-
-ID:  6
-Ingredient:  sixth ingredient
-Cost: $ 5.29
-
-**********
-There are 12 recipes in your Cookie Jar:
-
-(1, 1, '1 1/2 cup')
-(1, 2, '1/2 tsp')
-(1, 3, '1 stick')
-(1, 5, '1 tbsp')
-(2, 1, '2 cup')
-(2, 5, '1/2 tbsp')
-(3, 1, '2 1/4 cup')
-(3, 3, '2 sticks')
-(3, 5, '2 tbsp')
-(5, 1, '2 1/2 cup')
-(5, 2, '1/4 tsp')
-(2, 6, '14 oz')
-
-**********
-Sorting 5 cookies by price:
-
-(5, 'fifth cookie', 'step1, step2,  step3', 3)
-(1, 'first cookie', 'step1, step2,  step3', 5)
-(6, 'sixth cookie', 'step1, step2, step3', 7)
-(3, 'third cookie', 'step1, step2,  step3', 8)
-(2, 'second cookie', 'step1, step2,  step3', 9)
-
-***** Get all ingredients for each cookie *****
-('fifth cookie', '2 1/2 cup', 'first ingredient', 3.49)
-('fifth cookie', '1/4 tsp', 'second ingredient', 6.99)
-('first cookie', '1 tbsp', 'fifth ingredient', 1.67)
-('first cookie', '1 1/2 cup', 'first ingredient', 3.49)
-('first cookie', '1/2 tsp', 'second ingredient', 6.99)
-('first cookie', '1 stick', 'third ingredient', 2.48)
-('second cookie', '1/2 tbsp', 'fifth ingredient', 1.67)
-('second cookie', '2 cup', 'first ingredient', 3.49)
-('second cookie', '14 oz', 'sixth ingredient', 5.29)
-('third cookie', '2 tbsp', 'fifth ingredient', 1.67)
-('third cookie', '2 1/4 cup', 'first ingredient', 3.49)
-('third cookie', '2 sticks', 'third ingredient', 2.48)
-
-***** Total cost of ingredients for each cookie *****
-Cookie:  fifth cookie
-Total Cost: $ 10.48
-
-Cookie:  first cookie
-Total Cost: $ 14.63
-
-Cookie:  second cookie
-Total Cost: $ 10.45
-
-Cookie:  third cookie
-Total Cost: $ 7.64
-```
+1. `(Internship-python-2)% python3 manage.py runserver`  
   
 2. Push to GitHub:  
  
 	a. `(Internship-python-2)% git add .`  
   
-	b. `(Internship-python-2)% git commit -m "created relational db schema"`   
+	b. `(Internship-python-2)% git commit -m "connect Django to project"`   
   
-	c. `(Internship-python-2)% git push cookie Internship-py-2-3`  
+	c. `(Internship-python-2)% git push cookie Internship-py-2-4`  
   
 ---  

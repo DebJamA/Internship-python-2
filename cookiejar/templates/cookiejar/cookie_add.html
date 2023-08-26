@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}Add Cookie{% endblock %}
+
+{% block content %}
+
+    <h1>Add A Cookie To The Cookie Jar</h1>
+    <hr>
+
+        <form enctype="multipart/form-data" class="form-horizontal" method="POST" action="">
+        {% csrf_token %}
+
+            <div class="row spacer">
+                <div class="col-md-8">
+                    {{ form.as_p }}
+                <div>
+            </div>
+
+            <div class="row spacer">
+                <div class="col-md-8">
+                    <button type="submit" class="btn btn-block btn-primary">Save Cookie</button>
+                </div>
+            </div>
+        </form>
+        <hr>
+
+    <a href="{% url 'cookie_list' %}">Cancel and Go Back to Cookie List</a>
+
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}Cookie Recipe{% endblock %}
+
+{% block content %}
+
+    <h1>{{ object.cookie_name|capfirst }} Cookie Recipe</h1>
+    <hr>
+
+        <div>
+            <p>ID: {{ object.id }}</p>
+            <p><strong>{{ object.cookie_name|capfirst }}</strong></p>
+            <p><strong>Price: </strong>${{ object.price }}</p>
+
+            <p><strong>Ingredients:</strong></p>
+            <ul>
+                {% for r in recipe %}
+                <li>{{ r.measure}} {{ r.ingredient.ingredient_name}} {{ r.ingredient.cost}}</li>
+                {% endfor %}
+            </ul>
+
+            <p><strong>Instructions:</strong></p>
+            <p>{{ object.instructions }}</p>
+        </div>
+        <hr>
+
+        <div>
+            <p>The total cost of <strong>{{ ingredient_count }}</strong> ingredients for this cookie is <strong>${{ total_cost|floatformat:2 }}</strong></p>
+        </div>
+        <hr>
+
+    <a href="{% url 'cookie_confirm_delete' object.pk %}">Delete Cookie</a>
+    <br/>
+    <a href="{% url 'cookie_update' object.pk %}">Edit Cookie</a>
+    <br/>
+    <a href="{% url 'cookie_list' %}">Back to Cookie List</a>
+
+{% endblock %}

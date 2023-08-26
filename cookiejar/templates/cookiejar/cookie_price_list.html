@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block title %}Cookie Price List{% endblock %}
+
+{% block content %}
+
+    <h1>Cookie Jar</h1>
+
+        <p><a href="{% url 'cookie_list' %}">Back to Cookie List</a>&emsp;
+            <a href='{% url "cookie_add" %}'>Add New Cookie to Cookie Jar</a></p>
+
+    <h2>Cookies by Price</h2>
+    <h4>There are {{ cookie_price_list.count }} cookies!</h4>
+
+        <div>
+            <table aria-label="list of cookies by price">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cookie</th>
+                        <th>Price</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                {% for p in cookie_price_list %}
+                <tr>
+                    <td>{{ p.id }}</td>
+                    <td><a href='{% url "cookie_detail" p.pk %}'>{{ p.cookie_name|capfirst }}</a></td>
+                    <td>${{ p.price }}</td>
+                    <td><a href='{% url "cookie_update" p.pk %}'>Edit Cookie</a></td>
+                    <td><a href='{% url "cookie_confirm_delete" p.pk %}'>Delete Cookie</a></td>
+                    </tr>
+                {% empty %}
+                <tr>
+                    <td>#</td>
+                    <td>No Cookies</td>
+                    <td>$</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+{% endblock %}

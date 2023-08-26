@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}Confirm Delete Cookie{% endblock %}
+
+{% block content %}
+
+        <h1>Confirm Delete Cookie Recipe</h1>
+    <hr>
+
+        <div>
+            <p>ID: {{ object.id }}</p>
+            <p><strong>{{ object.cookie_name|capfirst }}</strong></p>
+            <p><strong>Price: </strong>${{ object.price }}</p>
+
+            <p><strong>{{ ingredient_count }} Ingredients, total cost: ${{ total_cost|floatformat:2 }}</strong></p>
+            <ul>
+                {% for r in recipe %}
+                <li>{{ r.measure}} {{ r.ingredient.ingredient_name}} {{ r.ingredient.cost}}</li>
+                {% endfor %}
+            </ul>
+
+            <p><strong>Instructions:</strong></p>
+            <p>{{ object.instructions }}</p>
+        </div>
+        <hr>
+
+        <div>
+            <form method="post">
+                {% csrf_token %}
+                <h4>Are you sure you want to delete <u>{{ object.cookie_name|capfirst }}</u>?</h4>
+                <input type="submit" value="YES Delete Cookie">
+            </form>
+        </div>
+
+        <br/>
+        <hr>
+        <br/>
+
+        <a href="{% url 'cookie_list' %}">NO CANCEL</a>
+
+{% endblock %}
