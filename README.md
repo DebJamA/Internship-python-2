@@ -271,9 +271,13 @@ ___
   
 ## Run the app  
   
-1. `(Internship-python-2)% python3 manage.py runserver`  
+1. Make sure the app works  
+	`(Internship-python-2)% python3 manage.py runserver`  
   
-2. Push to GitHub:  
+2. Create requirements.txt to share project and others can easily reproduce the environment  
+	`(Internship-python-2)% pipenv requirements > requirements.txt`  
+  
+3. Push to GitHub:  
  
 	a. `(Internship-python-2)% git add .`  
   
