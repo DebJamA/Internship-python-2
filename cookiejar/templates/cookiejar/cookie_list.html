@@ -6,11 +6,8 @@
 
     <h1>Cookie Jar</h1>
 
-        <p><a href='{% url "cookie_price_list" %}'>Order Cookies by Price</a>&emsp;
-            <a href='{% url "cookie_add" %}'>Add New Cookie to Cookie Jar</a></p>
-
     <h2>Cookie List</h2>
-    <h4>There are {{ cookie_count }} cookies!</h4>
+    <h4>There are {{ cookie_list.count }} cookies!</h4>
 
         <div>
             <table aria-label="list of cookies">

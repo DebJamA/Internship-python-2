@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+
+    <h1>{{ profile.username }}</h1>
+    <hr>
+
+    <div>
+
+        <p>You signed up on {{ profile.date_joined|date:"F j, Y" }}</p>
+
+        <p>Email: {{ profile.email }}</p>
+
+        <p>First Name: {{ profile.first_name }}</p>
+
+        <p>Last Name: {{ profile.last_name }}</p>
+
+    </div>
+    <hr>
+
+    <a href="{% url 'users:update_profile' user.pk %}">Update My Profile</a>
+
+{% endblock %}

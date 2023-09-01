@@ -4,12 +4,14 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pypyodbc = "*"
 django = "*"
 django-environ = "*"
+whitenoise = "*"
 
 [dev-packages]
 pycodestyle = "*"
+pypyodbc = "*"
+django-debug-toolbar = "*"
 
 [requires]
 python_version = "3.11"

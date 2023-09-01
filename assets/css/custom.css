@@ -1,0 +1,60 @@
+/* LAYOUT.HTML */
+/* navbar */
+#navbar-logo {
+    color:#32cd32 !important;
+}
+#navbar-logo2 {
+    color:#32cd32 !important;
+}
+
+/* navbar-nav nav-link */
+.navbar-nav a.nav-link:link, .navbar-nav a.nav-link:visited {
+    color:white !important;
+}
+.navbar-nav a.nav-link:hover, .navbar-nav a.nav-link:active {
+    color:#32cd32 !important;
+}
+
+/* navbar-spacer */
+#navbar-spacer {
+            bottom: 0;
+            width: 100%;
+            height: 75px;
+            padding: 0px;
+            margin-top: 20px;
+}
+
+/* nav-scroller Welcome username */
+#welcome {
+    color:#32cd32 !important;
+}
+
+/* pagination */
+a.page-link:link, a.page-link:visited {
+    color: white !important;
+    text-decoration-color:white;
+}
+a.page-link:hover, a.page-link:active {
+	color:#32cd32;
+    text-decoration-color:#32cd32;
+}
+.page-current {
+    color:#32cd32;
+}
+
+/* footer */
+#footer-spacer {
+            bottom: 0;
+            width: 100%;
+            height: 100px;
+            padding: 0px;
+            margin-top: 20px;
+}
+#footer-footer {
+            bottom: 0;
+            width: 100%;
+            height: 60px;
+            padding: 0px;
+            margin-top: 20px;
+}
+/* ========== end of layout.html ========== */

@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.urls import reverse
 
@@ -16,19 +17,20 @@ class Ingredient(models.Model):
 
 # one cookie can have multiple ingredients
 class Cookie(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, default=1, on_delete=models.CASCADE)
     cookie_name = models.CharField(max_length=50)
     price = models.IntegerField()
     instructions = models.CharField(max_length=500)
     ingredients = models.ManyToManyField(Ingredient, through='CookieIngredient')
 
     class Meta:
-        ordering = ['-id', ]
+        ordering = ['user', '-id', ]
 
     def get_absolute_url(self):
         return reverse('cookie_update', kwargs={'pk': self.pk})
 
     def __str__(self):
-        return f"{self.cookie_name}, {self.price}, {self.instructions}"
+        return f"{self.user}, {self.cookie_name}, {self.price}, {self.instructions}"
 
 # connect a Cookie its Ingredients
 class CookieIngredient(models.Model):
