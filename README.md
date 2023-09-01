@@ -1,101 +1,49 @@
-# Install Django Debug Toolbar (py-2-5)  
+# Project: Cookie Jar - for cookie recipe management (Internship-python-2)  
   
 ---  
   
-## Make sure the system is set up properly  
+## Project Description  
   
-1. Make sure you are in the pipenv **(Internship-python-2) %** directory  
+Scenario: I am employed by Simco Food Services, Inc. (a fictional company) as a Python Developer on their Software Development Team.  
   
-2. Create and switch to new branch ***Internship-py-2-5***  
+The manager has assigned a project:  
+*to create a new recipe book web application for users to create and manage cookie recipes.*  
   
-3. Forgot to register models `Ingredeint`, `Cookie`, `CookieIngredient` to Django admin  
+___  
   
-- Update `cookiejar/admin.py`  
-- `% python3 manage.py createsuperuser`  
-- `% python3 manage.py runserver`  
-- `http://127.0.0.1:8000/admin` to view the models  
+## Project Deliverable  
   
-4. If not already created in root directory, create `assets/css` and `assets/js`  
+The deliverable for this project is a cookie recipe management web application that allows users to view, add, modify, and delete cookies in the Cookie database.  
   
----  
+___  
   
-## Install and Set Up the Django Debug Toolbar  
+## Project Tools  
   
-1. `% python3  -m  pip  install  django-debug-toolbar`  
+Python  
+SQL  
+Flask  
+Django  
+PyCharm  
+Git    
+SQLite3  
+HTML5  
+CSS3  
   
-- To include in pipenv and update `requirements.txt`:  
-	- `% pipenv install --dev django-debug-toolbar`  
-	- `% pipenv requirements > requirements.txt`  
+___  
   
-2. Update `coolsite/settings/base.py`  
+## Project Tasks  
   
-- Ensure `INSTALLED_APPS` includes this:  
-	```
-	'django.contrib.staticfiles',  
-	'debug_toolbar',
-	```  
+1. Setup the Development Environment (py-2-1)  
+2. Create **Cookies** Class and DB Table (py-2-2)  
+3. Create **Ingredients** Class and DB Table (py-2-3)  
+4. Work with Django (py-2-4)  
+5. Install Django Debug Toolbar (py-2-5)  
   
-- Ensure `MIDDLEWARE` includes this after SecurityMiddleware:  
-	```
-	'debug_toolbar.middleware.DebugToolbarMiddleware',
-	```  
+___  
   
-- Add `INTERNAL_IPS = ['127.0.0.1']` after `ROOT_URLCONF`  
+## Simco Cookie Jar  
   
-- Ensure `TEMPLATES` includes this:  
-	```
-	'BACKEND': 'django.template.backends.django.DjangoTemplates',
-	'APP_DIRS': True,
-	```  
+The main (default) branch of the Internship-python-2 repo is the final working code and configuration for this web app.  
   
-- Ensure `STATIC_URL = 'static/'`  
-  
-3. Update `coolsite/urls.py`  
-	```
-	if settings.DEBUG:  
-	    import debug_toolbar  
-	    urlpatterns = [  
-	        path('__debug__/', include(debug_toolbar.urls)),  
-	    ] + urlpatterns
-	```  
-  
-4. Collect static files:  
-  
-- `python3 manage.py collectstatic`  
-- `% python3 manage.py runserver`  
-- `http://127.0.0.1:8000/` to view the toolbar column on the right  
-  
----  
-  
-## Improve User Experience  
-  
-- Note: In order to change `User` registration from `username` to `email`, I had to wipe database, delete migration files, and delete `__pycache__` files to create  an `AbstractBaseUser` since a `CustomUser` model was NOT set up at the start of this project  
-  
-- Create Sign up with extra fields, Log in, and log out  
-  
-- Add `user` `ForeignKeY` to model `Cookie`  
-  
-- Password reset (no SMTP so copy/paste link from the *"email"*  in the `sent_emails` folder)  
-  
-- Install [whitenoise](https://whitenoise.readthedocs.io/en/latest/django.html) for static files to be served in production  
-  
-- Be sure to `collectstatic`, `makemigrations` and `migrate`  
-  
----  
-  
-
-## Run the app  
-  
-1. Make sure the app works  
-	`% python3 manage.py runserver`  
-  
-2. Push to GitHub:  
- 
-	a. `% git add .`  
-  
-	b. `% git commit -m "enable Django debug toolbar"`   
-  
-	c. `% git push cookie Internship-py-2-5`  
-  
----  
+___  
   
